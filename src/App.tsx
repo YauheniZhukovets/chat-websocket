@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
-import './App.css';
+import s from './App.module.scss'
+
 
 type UserType = {
     userId: number
@@ -21,6 +22,8 @@ export const App = () => {
             setUsers([...users, ...data])
         }
     }
+
+    const numberOfUsers = new Set(users.map(u => u.userId))
 
     useEffect(() => {
         const localWs = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
@@ -46,18 +49,24 @@ export const App = () => {
     }
 
     return (
-        <div className="App">
-            <div className={'chat'}>
-                <div className={'users'}>
-                    {users.map((u, index) => <div key={index} className={'message'}>
-                        <img className={'photo'} src={u.photo} alt={'icon'}/>
+        <div className={s.App}>
+            <div className={s.chat}>
+                <div className={s.header}>
+                    <div>Welcome to the Chat Flood Room</div>
+                </div>
+                <div className={s.dialogs}>
+                    {users.map((u, index) => <div key={index} className={s.message}>
+                        <img className={s.photo} src={u.photo} alt={'icon'}/>
                         <b>{u.userName}</b>
                         <span>{u.message}</span>
                     </div>)
                     }
                     <span ref={scrollSpan}></span>
                 </div>
-                <div className={'footer'}>
+                <div className={s.questionBox}>
+                    <div className={s.textBox}></div>
+                    <div className={s.buttonContainer}></div>
+                    <span>Количество пользователей: <b> {numberOfUsers.size}</b></span>
                     <textarea value={text} onChange={onChangeTextareaMessage}
                               placeholder={'Enter text message'}></textarea>
                     <button onClick={onClickSendMessageHandler}>send message</button>
