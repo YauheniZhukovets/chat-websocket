@@ -15,6 +15,7 @@ export const App = () => {
     const [ws, setWs] = useState<WebSocket | null>(null)
     const [text, setText] = useState<string>('')
     const [users, setUsers] = useState<Array<UserType>>([])
+    const numbersUsers = new Set(users.map(u => u.userId))
 
     if (ws) {
         ws.onmessage = (messageEvent: MessageEvent) => {
@@ -22,8 +23,6 @@ export const App = () => {
             setUsers([...users, ...data])
         }
     }
-
-    const numberOfUsers = new Set(users.map(u => u.userId))
 
     useEffect(() => {
         const localWs = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
@@ -64,12 +63,22 @@ export const App = () => {
                     <span ref={scrollSpan}></span>
                 </div>
                 <div className={s.questionBox}>
-                    <div className={s.textBox}></div>
-                    <div className={s.buttonContainer}></div>
-                    <span>Количество пользователей: <b> {numberOfUsers.size}</b></span>
-                    <textarea value={text} onChange={onChangeTextareaMessage}
-                              placeholder={'Enter text message'}></textarea>
-                    <button onClick={onClickSendMessageHandler}>send message</button>
+                    <div className={s.textBox}>
+                        <textarea className={s.textArea}
+                                  value={text}
+                                  onChange={onChangeTextareaMessage}
+                                  placeholder={'Enter text message'}
+                        />
+                    </div>
+                    <div className={s.buttonContainer}>
+                        <button className={s.sendButton}
+                                disabled={text.length === 0}
+                                onClick={onClickSendMessageHandler}
+                        >
+                            Send message
+                        </button>
+                        <span className={s.numbersUsers}>Number of users: <b> {numbersUsers.size}</b></span>
+                    </div>
                 </div>
             </div>
         </div>
