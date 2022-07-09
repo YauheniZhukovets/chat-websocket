@@ -55,9 +55,9 @@ export const App = () => {
                 </div>
                 <div className={s.dialogs}>
                     {users.map((u, index) => <div key={index} className={s.message}>
-                        <img className={s.photo} src={u.photo} alt={'icon'}/>
-                        <b>{u.userName}</b>
-                        <span>{u.message}</span>
+                        <div className={s.photoWrapper}><img className={s.photo} src={u.photo} alt={'icon'}/></div>
+                        <span className={s.name}>{u.userName}</span>
+                        <div className={s.text}>{u.message}</div>
                     </div>)
                     }
                     <span ref={scrollSpan}></span>
